@@ -1,0 +1,12 @@
+/* glue: {{ version }} hash: {{ hash }} */
+.SF{
+	background-image:url('{{ sprite_path }}');
+	background-repeat:no-repeat;
+	background-size: {{ width }}px {{ height }}px;
+	{% for r, ratio in ratios.items() %}{% if ratio.ratio > 1 %}@media screen and (-webkit-min-device-pixel-ratio: {{ ratio.ratio }}), screen and (min-device-pixel-ratio: {{ ratio.ratio }}){
+		& { background-image:url('{{ ratio.sprite_path }}'); }
+	}{% endif %}{% endfor %}
+}
+
+{% for image in images %}
+.{{ image.label }}{{ image.pseudo }} { width: {{ image.width }}px; height: {{ image.height }}px; background-position:{{ image.x ~ ('px' if image.x) }} {{ image.y ~ ('px' if image.y) }}; }{% endfor %}

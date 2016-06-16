@@ -8,7 +8,6 @@ var gulp = require('gulp'),
 
 // project sub modules
 var globs = require("./bin/globs"),
-	str = require('./bin/string'),
 	clean = require('./bin/gulp-clean'),
 	curryTask = require('./bin/gulp-builder').curryTask;
 
@@ -103,10 +102,6 @@ gulp.task('clean:frontend', function(callback) {
 	clean(globs.del.frontend, 'frontend', callback);
 });
 
-gulp.task('clean:backend', function(callback) {
-	clean(globs.backend.created, 'backend', callback);
-});
-
 gulp.task('clean:sprite', function(callback) {
 	clean(globs.del.sprite, 'sprite', callback);
 });
@@ -121,7 +116,6 @@ gulp.task('clean:svg', function(callback) {
 
 gulp.task('clean', [
 	'clean:frontend',
-	'clean:backend',
 	'clean:sprite',
 	'clean:font',
 	'clean:svg',

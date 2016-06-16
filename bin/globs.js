@@ -1,5 +1,3 @@
-/* global process */
-
 // globs definition
 var path = require('path');
 var fs = require('fs');

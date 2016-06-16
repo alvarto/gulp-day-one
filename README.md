@@ -10,20 +10,19 @@ It does these stuff with normal build by tying `gulp`:
 - copy third party files
 - compile less files
 - copy other files
-- look out for changes and do previous things again
+- look out for changes and do previous task(s) again
 
-Could also does these manually:
+Additionally, when type those command manually:
 
 - `gulp svg`: combine svg files so you can inline them
 - `gulp sprite`: make sprites or @2x sprites (using [glue.py](https://github.com/jorgebastida/glue))
+Python 2.x & PIL required
 - `gulp font`: subset font files based on the charecters needed (using [sfntly](https://github.com/googlei18n/sfntly))
+JRE 7.0+ required
 
 # Bathtub thoughts behind this
 
 When using gulp, you copy and paste gulpfile in between projects. What if we use same gulpfile for different projects (coz we lazy)? How do we organize folders? This project tries to answer these questions.
-
-Every task is formed as "folder A to folder B". Thus we extract common folder pattern to one file: `globs.js`.
-Tasks running order are organized by their dependencies, and we chose to take relatively fixed steps to do those stuff.
 
 ## Folder pattern
 
@@ -36,12 +35,13 @@ And somehow our output folder pattern is forced to be like this:
 /UPCOMING IMAGE PLACEHOLDER/
 
 In order to form this kind of gulp folder pipeline, we need to extract folder pattern. This is where `node-glob` fails us. Pattern information are lost after the matching.
-I've found another way to express folder inputs and outputs, the express.js-route-like-way-of-expressing:
+I've found another way to express folder inputs and outputs, the express.js-route-like way of expressing:
 
 ```
-// source
+// imagine you are doing a browserify pipeline
+// source can be
 javascript/bundle/:entry.js
-// dist
+// dist can be
 destination/resource/js/:entry.bundle.js
 ```
 
@@ -53,4 +53,3 @@ These infomation are stored in `/bin/globs.js`. Check them out.
 - `/asset/`: Every assets but the bundled js files
 - `/bundle/`: The bundled js files. It's seprated from the `/asset/` because the base folder of `require()` is `__dirname`. To skip the ugliness of using a hell lot of `require("../../../common/stuff.js")` or `require(COMMON_PATH + "/common/stuff.js")`, we simply, put, them, here. In one place.
 - `/destination/`: Auto-generated target files lie here
-
