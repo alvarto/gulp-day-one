@@ -115,14 +115,14 @@ gulp.task('clean:font', function (callback) {
 	clean(globs.del.font, 'sprite', callback);
 });
 
-// gulp.task('clean:svg', function (callback) {
-// 	clean(globs.del.svg, 'sprite', callback);
-// });
+gulp.task('clean:svg', function (callback) {
+	clean(globs.del.svg, 'sprite', callback);
+});
 
 // preprocesser
 gulp.task('sprite', require('./bin/gulp-sprite'));
 gulp.task('font', require('./bin/gulp-font'));
-// gulp.task('svg', require('./bin/gulp-svg'));
+gulp.task('svg', require('./bin/gulp-svg'));
 
 // watch related gulp tasks
 gulp.task('build', [

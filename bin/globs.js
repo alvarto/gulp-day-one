@@ -19,7 +19,7 @@ folderManager.js = {
 		'javascript/:entry.js',
 		'destination/resource/js/bundle/', {
 			watch: 'javascript/**/*.js',
-			fillSource: function(entry) {
+			fillSource: function (entry) {
 				return `javascript/${entry}.js`;
 			},
 		}
@@ -34,16 +34,19 @@ folderManager.bitmap = new TaskPathMapper(
 );
 
 folderManager.svg = new TaskPathMapper(
-	'asset/:project/svg/:svgfile',
+	'asset/:project/svg/',
 	'asset/:project/bitmap/v/', {
 		demoDist: 'destination/resource/html/svg/',
+		fillSource: function (project) {
+			return `asset/${project}/svg/*.svg`;
+		},
 	}
 );
 
 folderManager.sprite = new TaskPathMapper(
 	'asset/:project/:type(sprite|sprite\.wap)/:sub?/',
 	'asset/:project/bitmap/s/', {
-		fillSource: function(project, type, sub) {
+		fillSource: function (project, type, sub) {
 			return `asset/${project}/${type}/${sub || ""}`;
 		},
 		getLessDist: function (project) {
