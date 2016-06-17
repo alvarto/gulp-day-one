@@ -103,13 +103,13 @@ gulp.task('groceries:copy', globs.groceries.curryTask(
 ));
 
 // gulp tasks for commandline
-gulp.task('clean:frontend', function (callback) {
+gulp.task('clean', function (callback) {
 	clean(globs.del.frontend, 'frontend', callback);
 });
 
-// gulp.task('clean:sprite', function (callback) {
-// 	clean(globs.del.sprite, 'sprite', callback);
-// });
+gulp.task('clean:sprite', function (callback) {
+	clean(globs.del.sprite, 'sprite', callback);
+});
 
 // gulp.task('clean:font', function (callback) {
 // 	clean(globs.del.font, 'sprite', callback);
@@ -120,22 +120,9 @@ gulp.task('clean:frontend', function (callback) {
 // });
 
 // preprocesser
-// gulp.task('sprite', require('./bin/gulp-sprite'));
+gulp.task('sprite', require('./bin/gulp-sprite'));
 // gulp.task('font', require('./bin/gulp-font'));
 // gulp.task('svg', require('./bin/gulp-svg'));
-
-// gulp.task('pre', ['sprite', 'font', 'svg']);
-
-// a good task which runs them all
-gulp.task('refresh', function (callback) {
-	runsequence(
-		'clean', // clean all autocommitted stuff
-		'pre', // precompile 
-		'build', // build and set up backend
-		// 'deploy', // deploy to backend
-		callback
-	);
-});
 
 // watch related gulp tasks
 gulp.task('build', [

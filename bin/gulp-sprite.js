@@ -1,13 +1,9 @@
-var fs = require('fs'),
-	exec = require('child_process').exec,
-	path = require('path'),
-	_ = require('lodash');
-
-var parsePath = require('./gulp-builder').globParse,
+const exec = require('child_process').exec,
+	_ = require('lodash'),
 	globs = require("./globs"),
-	str = require('./string');
+	sprintf = require("util").format;
 
-var commandDesktop = str.buildConsole(['glue', '%s', '%s', '--less=%s'], {
+var commandDesktop = buildConsole(['glue', '%s', '%s', '--less=%s'], {
 		margin: 4,
 		namespace: 's',
 		'sprite-namespace': ' ',
@@ -18,65 +14,42 @@ var commandDesktop = str.buildConsole(['glue', '%s', '%s', '--less=%s'], {
 	commandWap = commandDesktop + " --retina";
 
 module.exports = function(callback) {
-	var statusObj = fileStatus(),
-		preStatus = statusObj.read(),
-		curStatus = {},
-		pathObj = _.cloneDeep(globs.sprite);
+	var mapper = _.cloneDeep(globs.sprite);
 
-	if (process.argv.indexOf("--p") > -1) {
-		// gulp sprite --p xxFolder -> ['node', 'path/to/gulp.js', 'sprite', '--p', 'xxFolder']
-		var filteredFolder = process.argv[process.argv.indexOf("--p") + 1];
-		pathObj.source = pathObj.source.replace("*", filteredFolder);
-	}
+	// if (process.argv.indexOf("--p") > -1) {
+	// 	// gulp sprite --p xxFolder -> ['node', 'path/to/gulp.js', 'sprite', '--p', 'xxFolder']
+	// 	var filteredFolder = process.argv[process.argv.indexOf("--p") + 1];
+	// 	mapper.globSource = mapper.globSource.replace("*", filteredFolder);
+	// }
 
-	parsePath(pathObj)
+	mapper.promiseSourceParse()
 		.then(function(paramTable) {
 			return Promise.all(paramTable.map(function(params) {
-				return getFolderStat.apply(null, params);
+				return manufacture.apply(null, params);
 			}));
-		})
-		.then(function(folderStatTable) {
-			var promises = folderStatTable
-				.filter(function(params) {
-					return filterModified.apply(null, params);
-				})
-				.map(function(params) {
-					return manufacture.apply(null, params);
-				});
-			return Promise.all(promises)
 		})
 		.then(function(arr) {
 			console.log(
-				"Sprites:\t%d successed\n\t\t%d modified\n\t\t%d total.",
+				"Sprites:\t%d successed\n\t\t%d total.",
 				arr.reduce(function(prev, cur) {
 					return prev + cur;
 				}),
-				arr.length,
-				Object.keys(curStatus).length
+				arr.length
 			);
 			console.log(
 				"Run gulp clean:sprite before this to recreate all."
 			);
-
-			// statusObj.write(curStatus);
 			callback();
 		}, callback);
-
-	function filterModified(source, destination, project, type, sub) {
-		if (!preStatus[source] || curStatus[source] > preStatus[source]) {
-			return true;
-		}
-		return false;
-	}
 
 	function manufacture(source, destination, project, type, sub) {
 		var command = {},
 			less = globs.sprite.getLessDist(project),
 			imgLink = globs.sprite.getImageLink(project, type, sub);
 		if (type === 'sprite.wap') {
-			command = str.sprintf(commandWap, source, destination, less, imgLink);
+			command = sprintf(commandWap, source, destination, less, imgLink);
 		} else {
-			command = str.sprintf(commandDesktop, source, destination, less, imgLink);
+			command = sprintf(commandDesktop, source, destination, less, imgLink);
 		}
 
 		return execPromise(command)
@@ -85,46 +58,10 @@ module.exports = function(callback) {
 				return 1;
 			}, function(err) {
 				console.error("Error in path\t" + source);
-				// console.error(err);
 				return 0;
 			});
 	}
-
-	function getFolderStat(source, destination, project, type, sub) {
-		return new Promise(function(resolve, reject) {
-			fs.stat(source, function(err, stat) {
-				if (err) {
-					reject(err);
-					return;
-				}
-
-				curStatus[source] = +stat.mtime;
-				resolve([source, destination, project, type, sub]);
-			});
-		});
-	}
 };
-
-function fileStatus() {
-	if (!fs.existsSync(globs.sprite.md5Base)) {
-		fs.mkdirSync(globs.sprite.md5Base);
-	}
-
-	var md5FilePath = globs.sprite.md5Base + 'sprites.md5';
-	return Object.freeze({
-		read: function() {
-			var lastFolders = {};
-			try {
-				var jsonFile = fs.readFileSync(md5FilePath);
-				lastFolders = JSON.parse(jsonFile);
-			} catch (exc) {}
-			return lastFolders;
-		},
-		write: function(curFolders) {
-			fs.writeFileSync(md5FilePath, JSON.stringify(curFolders));
-		}
-	});
-}
 
 function execPromise(command) {
 	return new Promise(function(resolve, reject) {
@@ -136,4 +73,17 @@ function execPromise(command) {
 			resolve(stdout);
 		});
 	});
+}
+
+function buildConsole(params, options) {
+	var str = params.join(" ");
+	for (var key in options) {
+		var val = options[key];
+		if (!val) {
+			str += ` --${key}`;
+		} else {
+			str += ` --${key}=${val}`;
+		}
+	}
+	return str;
 }

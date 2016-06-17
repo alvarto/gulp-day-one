@@ -21,6 +21,7 @@ function TaskPathMapper(from, to, overrides) {
 		to: to,
 		pathFrom: pathFrom,
 		pathTo: pathTo,
+		globSource: pathFrom.glob,
 		fillSource: function() { // source glob goes back to the folder outside the file
 			var str = pathFrom.fill.apply(null, arguments);
 			str = str.replace(arguments[arguments.length - 1], "*");
@@ -61,7 +62,7 @@ TaskPathMapper.prototype.curryTask = function (gulpBuildFn) {
 
 TaskPathMapper.prototype.promiseSourceParse = function () {
 	var mapper = this;
-	return promiseGlob(this.pathFrom.glob)
+	return promiseGlob(this.globSource)
 		.then(function (files) {
 			var paramTable = files.map(function (entry) {
 				var results = mapper.pathFrom.reg.exec(entry);

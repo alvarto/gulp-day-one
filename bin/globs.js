@@ -27,7 +27,7 @@ folderManager.js = {
 };
 
 folderManager.bitmap = new TaskPathMapper(
-	'asset/:project/bitmap/:sub*/:img',
+	'asset/:project/bitmap/:sub*/:imgfile',
 	'destination/resource/img/:project/:sub*/', {
 		watch: 'asset/*/bitmap/**',
 	}
@@ -41,8 +41,11 @@ folderManager.svg = new TaskPathMapper(
 );
 
 folderManager.sprite = new TaskPathMapper(
-	'asset/:project/:type(sprite|sprite\.wap)/:sub?/:img',
+	'asset/:project/:type(sprite|sprite\.wap)/:sub?/',
 	'asset/:project/bitmap/s/', {
+		fillSource: function(project, type, sub) {
+			return `asset/${project}/${type}/${sub || ""}`;
+		},
 		getLessDist: function (project) {
 			return 'asset/' + project + '/less/s';
 		},
