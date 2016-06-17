@@ -2,6 +2,9 @@
 
 This is an empty gulp project based on our practice for the last 2 years.
 
+- [demo branch](https://github.com/alvarto/gulp-day-one/tree/demo)
+- [demo output](http://alvarto.github.io/gulp-day-one/destination/index.html)
+
 It does these stuff with normal build by tying `gulp`:
 
 - compile jade files to html
@@ -51,5 +54,5 @@ These infomation are stored in `/bin/globs.js`. Check them out.
 
 - `/bin/`: Whatever a workflow requires but a frontend page doesn't require, it's here. 
 - `/asset/`: Every assets but the bundled js files
-- `/bundle/`: The bundled js files. It's seprated from the `/asset/` because the base folder of `require()` is `__dirname`. To skip the ugliness of using a hell lot of `require("../../../common/stuff.js")` or `require(COMMON_PATH + "/common/stuff.js")`, we simply, put, them, here. In one place.
+- `/javascript/`: The bundled js files. It's seprated from the `/asset/` because the base folder of `require()` is `__dirname`. To skip the ugliness of using a hell lot of `require("../../../common/stuff.js")` or `require(COMMON_PATH + "/common/stuff.js")`, we simply, put, them, here. In one place.
 - `/destination/`: Auto-generated target files lie here
