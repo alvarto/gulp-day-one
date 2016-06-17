@@ -50,7 +50,7 @@ folderManager.sprite = new TaskPathMapper(
 			return 'asset/' + project + '/less/s';
 		},
 		getImageLink: function (project, type, sub) {
-			return '/resource/img/' + project + '/s/';
+			return '../../img/' + project + '/s/';
 		},
 	}
 );
