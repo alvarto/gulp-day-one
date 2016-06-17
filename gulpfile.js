@@ -1,17 +1,14 @@
 // gulp part
-var gulp = require('gulp'),
+const gulp = require('gulp'),
 	$ = require('gulp-load-plugins')(),
-	fs = require('fs'),
-	runsequence = require("run-sequence"),
-	exec = require('child_process').exec,
-	eventstream = require('event-stream');
+	runsequence = require("run-sequence");
 
 // project sub modules
-var globs = require("./bin/globs"),
+const globs = require("./bin/globs"),
 	clean = require('./bin/gulp-clean');
 
 // browserify part
-var browserify = require('browserify'),
+const browserify = require('browserify'),
 	sourceStream = require('vinyl-source-stream');
 
 // simple build/copy tasks
@@ -42,15 +39,12 @@ gulp.task('jade:build', function (callback) {
 		basedir: globs.views.base,
 	};
 
-	gulp.src(globs.views.main)
+	return gulp.src(globs.views.main)
 		.pipe($.plumber())
 		.pipe($.jade(jadeOpt))
 		.pipe($.plumber.stop())
 		.pipe($.flatten())
 		.pipe(gulp.dest(globs.views.dist))
-
-	eventstream.merge(tasks)
-		.on('end', callback);
 });
 
 // build tasks with namespace

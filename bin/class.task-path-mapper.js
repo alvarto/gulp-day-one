@@ -19,10 +19,8 @@ function TaskPathMapper(from, to, overrides) {
 	_.extend(this, {
 		from: from,
 		to: to,
-		source: pathFrom.glob,
-		getSource: pathFrom.fill,
-		getDist: pathTo.fill,
-		parseSource: pathFrom.reg.exec
+		pathFrom: pathFrom,
+		pathTo: pathTo
 	});
 	_.extend(this, overrides);
 }
@@ -55,10 +53,10 @@ TaskPathMapper.prototype.curryTask = function (gulpBuildFn) {
 
 TaskPathMapper.prototype.promiseSourceParse = function () {
 	var mapper = this;
-	return promiseGlob(this.source)
+	return promiseGlob(this.pathFrom.glob)
 		.then(function (files) {
 			var paramTable = files.map(function (entry) {
-				var results = mapper.parseSource(entry);
+				var results = mapper.pathFrom.reg.exec(entry);
 				return results;
 			}).filter(function (elem) {
 				if (!elem || elem.length < 2) {
@@ -68,8 +66,8 @@ TaskPathMapper.prototype.promiseSourceParse = function () {
 			}).map(function (elem) {
 				var params = elem.slice();
 				params.shift();
-				var source = mapper.getSource.apply(mapper, params);
-				var destination = mapper.getDist.apply(mapper, params);
+				var source = mapper.pathFrom.fill.apply(null, params);
+				var destination = mapper.pathTo.fill.apply(null, params);
 
 				return [source, destination].concat(params);
 			});
