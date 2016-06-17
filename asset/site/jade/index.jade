@@ -7,7 +7,7 @@ block posthead
 block main
 	section
 		h1 Demo project
-		p Jade & LESS outputs are directly visible.
+		p Jade & LESS compile outputs are directly visible.
 	section
 		h2 Common loading state imported through base64
 		.ui-load-state.on-loading: .switch-loading: .icon-more
@@ -18,16 +18,25 @@ block main
 			button#ajax Browserified
 	section
 		h2 SVG
+			small (from the noun project)
 	section
 		h2 Project sprites
 			small (from Famfamfam)
+		.wrap-application
+			.s-application_xp_terminal.SF
+			.s-application_go.SF
+		.wrap-desktop
+			.s-book_open.SF
+			.s-book_add.SF
 	section
 		h2 Project sprites w/ @2x
 			small (from the noun project)
+		.wrap-wap
+			.s-human.SF
 	section.font
 		h2 Subfonts
 			small (from http://www.makefont.com/)
-			
+		p: strong 方正字体
 
 append final
 	script(src="resource/js/site/index.js")
