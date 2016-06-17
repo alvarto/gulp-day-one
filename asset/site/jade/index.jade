@@ -1,25 +1,34 @@
 extends /frame
 
 block posthead
-	title site project
+	title Demo project
 	link(rel="stylesheet" href="resource/css/site/index.css")
 
 block main
-	h1 Site project
-	p Hello world
 	section
-		h2 Common loading state imported w/ base64
-		.ui-load-state.on-loading: .ui-loading: .loading
+		h1 Demo project
+		p Jade & LESS outputs are directly visible.
 	section
-		h2 Project sprites
-	section
-		h2 Project sprites w/ @2x
+		h2 Common loading state imported through base64
+		.ui-load-state.on-loading: .switch-loading: .icon-more
 	section
 		h2 JS logics
 		div
 			button#alert Direct
 			button#ajax Browserified
+	section
+		h2 SVG
+	section
+		h2 Project sprites
+			small (from Famfamfam)
+	section
+		h2 Project sprites w/ @2x
+			small (from the noun project)
+	section.font
+		h2 Subfonts
+			small (from http://www.makefont.com/)
+			
 
-block final
+append final
 	script(src="resource/js/site/index.js")
 	script(src="resource/js/bundle/index.js")
