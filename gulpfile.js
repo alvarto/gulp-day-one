@@ -111,9 +111,9 @@ gulp.task('clean:sprite', function (callback) {
 	clean(globs.del.sprite, 'sprite', callback);
 });
 
-// gulp.task('clean:font', function (callback) {
-// 	clean(globs.del.font, 'sprite', callback);
-// });
+gulp.task('clean:font', function (callback) {
+	clean(globs.del.font, 'sprite', callback);
+});
 
 // gulp.task('clean:svg', function (callback) {
 // 	clean(globs.del.svg, 'sprite', callback);
@@ -121,7 +121,7 @@ gulp.task('clean:sprite', function (callback) {
 
 // preprocesser
 gulp.task('sprite', require('./bin/gulp-sprite'));
-// gulp.task('font', require('./bin/gulp-font'));
+gulp.task('font', require('./bin/gulp-font'));
 // gulp.task('svg', require('./bin/gulp-svg'));
 
 // watch related gulp tasks

@@ -72,8 +72,8 @@ folderManager.less = new TaskPathMapper(
 );
 
 folderManager.font = {
-	source: '/**/*.jade',
-	dist: 'asset/site.desktop/font/',
+	source: '**/*.jade',
+	dist: 'asset/common/font/',
 };
 
 folderManager.views = {
