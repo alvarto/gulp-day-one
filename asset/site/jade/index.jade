@@ -17,11 +17,8 @@ block main
 			button#alert Direct
 			button#ajax Browserified
 	section
-		h2 SVG
-			small (from the noun project)
-	section
 		h2 Project sprites
-			small (from Famfamfam)
+			small (from http://www.famfamfam.com/)
 		.wrap-application
 			.s-application_xp_terminal.SF
 			.s-application_go.SF
@@ -30,7 +27,7 @@ block main
 			.s-book_add.SF
 	section
 		h2 Project sprites w/ @2x
-			small (from the noun project)
+			small (from https://thenounproject.com/)
 		.wrap-wap
 			.s-human.SF
 	section.font
@@ -39,6 +36,12 @@ block main
 		p
 			strong 造字工房字体
 		p 无授权，请勿用于商业用途
+	section
+		h2 SVG
+			small (from http://www.flaticon.com/)
+		svg(width="180" height="180")
+			use(xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="resource/img/site/v/svg.svg#battery")
+		p: i Might not be able to show due to same-origin policy under `File:///`
 
 append final
 	script(src="resource/js/site/index.js")
