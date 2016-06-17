@@ -1,0 +1,15 @@
+doctype html
+block prehtml
+html(lang="zh-cmn-Hans" class=htmlclass)
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no")
+		block posthead
+	body(class=bodyclass)
+		#wrap_main
+			block main
+		#wrap_popup.wrap-popup
+			block popup
+		#wrap_data
+			block data
+		block final

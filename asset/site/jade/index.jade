@@ -1,0 +1,25 @@
+extends /frame
+
+block posthead
+	title site project
+	link(rel="stylesheet" href="resource/css/site/index.css")
+
+block main
+	h1 Site project
+	p Hello world
+	section
+		h2 Common loading state imported w/ base64
+		.ui-load-state.on-loading: .ui-loading: .loading
+	section
+		h2 Project sprites
+	section
+		h2 Project sprites w/ @2x
+	section
+		h2 JS logics
+		div
+			button#alert Direct
+			button#ajax Browserified
+
+block final
+	script(src="resource/js/site/index.js")
+	script(src="resource/js/bundle/index.js")
