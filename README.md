@@ -16,9 +16,9 @@ Additionally, when type those command manually:
 
 - `gulp svg`: combine svg files so you can inline them
 - `gulp sprite`: make sprites or @2x sprites (using [glue.py](https://github.com/jorgebastida/glue))
-Python 2.x & PIL required, you need to install the dependency of this first
+You need to install glue first
 - `gulp font`: subset font files based on the charecters needed (using [sfntly](https://github.com/googlei18n/sfntly))
-JRE 7.0+ required
+JRE 7+ required
 
 # Bathtub thoughts behind this
 
