@@ -18,7 +18,7 @@ folderManager.js = {
 	build: new TaskPathMapper( // first party js files, for combining
 		'javascript/:entry.js',
 		'destination/resource/js/bundle/', {
-			watch: 'javascript/bundle/**/*.js',
+			watch: 'javascript/**/*.js',
 			fillSource: function(entry) {
 				return `javascript/${entry}.js`;
 			},
@@ -27,21 +27,21 @@ folderManager.js = {
 };
 
 folderManager.bitmap = new TaskPathMapper(
-	'asset/:project/bitmap/:sub*/:img', //todo **?
+	'asset/:project/bitmap/:sub*/:img',
 	'destination/resource/img/:project/:sub*/', {
 		watch: 'asset/*/bitmap/**',
 	}
 );
 
 folderManager.svg = new TaskPathMapper(
-	'asset/:project/svg/:svgfile', //todo **?
+	'asset/:project/svg/:svgfile',
 	'asset/:project/bitmap/v/', {
 		demoDist: 'destination/resource/html/svg/',
 	}
 );
 
 folderManager.sprite = new TaskPathMapper(
-	'asset/:project/:type(sprite|sprite\.wap)/:sub?/:img', //todo **?
+	'asset/:project/:type(sprite|sprite\.wap)/:sub?/:img',
 	'asset/:project/bitmap/s/', {
 		getLessDist: function (project) {
 			return 'asset/' + project + '/less/s';

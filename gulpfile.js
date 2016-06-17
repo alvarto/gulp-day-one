@@ -58,7 +58,10 @@ gulp.task('less:build', function (callback) {
 });
 
 gulp.task('js:copy', globs.js.nonModule.curryTask(
-	function (source, destination) {
+	function (source, destination, project) {
+		if (project === 'common') {
+			return null;
+		}
 		return gulp.src(source)
 			.pipe(gulp.dest(destination));
 	}
@@ -115,13 +118,6 @@ gulp.task('clean:frontend', function (callback) {
 // gulp.task('clean:svg', function (callback) {
 // 	clean(globs.del.svg, 'sprite', callback);
 // });
-
-// gulp.task('clean', [
-// 	'clean:frontend',
-// 	'clean:sprite',
-// 	'clean:font',
-// 	'clean:svg',
-// ]);
 
 // preprocesser
 // gulp.task('sprite', require('./bin/gulp-sprite'));
