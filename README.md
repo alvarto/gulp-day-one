@@ -35,11 +35,10 @@ In order to form this kind of gulp folder pipeline, we need to extract folder pa
 I've found another way to express folder inputs and outputs, the express.js-route-like way of expressing:
 
 ```
-// imagine you are doing a browserify pipeline
 // source can be
-javascript/bundle/:entry.js
+asset/:project/javascript/:file
 // dist can be
-destination/resource/js/:entry.bundle.js
+destination/javascript/:project/
 ```
 
 These infomation are stored in `/bin/globs.js`. Check them out.
