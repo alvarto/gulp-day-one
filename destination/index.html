@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>Demo project</title>
+		<link rel="stylesheet" href="resource/css/site/index.css">
+	</head>
+	<body>
+		<div id="wrap_main">
+			<section>
+				<h1>Demo project</h1>
+				<p>Jade & LESS compile outputs are directly visible.</p>
+			</section>
+			<section>
+				<h2>Common loading state imported through base64</h2>
+				<div class="ui-load-state on-loading">
+					<div class="switch-loading">
+						<div class="icon-more"></div>
+					</div>
+				</div>
+			</section>
+			<section>
+				<h2>JS logics</h2>
+				<div>
+					<button id="alert">Direct</button>
+					<button id="ajax">Browserified</button>
+				</div>
+			</section>
+			<section>
+				<h2>Project sprites<small>(from http://www.famfamfam.com/)</small></h2>
+				<div class="wrap-application">
+					<div class="s-application_xp_terminal SF"></div>
+					<div class="s-application_go SF"></div>
+				</div>
+				<div class="wrap-desktop">
+					<div class="s-book_open SF"></div>
+					<div class="s-book_add SF"></div>
+				</div>
+			</section>
+			<section>
+				<h2>Project sprites w/ @2x<small>(from https://thenounproject.com/)</small></h2>
+				<div class="wrap-wap">
+					<div class="s-human SF"></div>
+				</div>
+			</section>
+			<section class="font">
+				<h2>Subfonts<small>(from http://www.makefont.com/)</small></h2>
+				<p><strong>造字工房字体</strong></p>
+				<p>无授权，请勿用于商业用途</p>
+			</section>
+			<section>
+				<h2>SVG<small>(from http://www.flaticon.com/)</small></h2>
+				<svg width="180" height="180">
+					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="resource/img/site/v/svg.svg#battery"></use>
+				</svg>
+				<p><i>Might not be able to show due to same-origin policy under `File:///`</i></p>
+			</section>
+		</div>
+		<div id="wrap_popup" class="wrap-popup">
+		</div>
+		<div id="wrap_data">
+		</div>
+		<script src="resource/module/underscore/1.8.2/underscore.js"></script>
+		<script src="resource/js/site/index.js"></script>
+		<script src="resource/js/bundle/index.js"></script>
+	</body>
+</html>
