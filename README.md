@@ -29,13 +29,7 @@ When using gulp, you copy and paste gulpfile in between projects. What if we use
 
 ## Folder pattern
 
-A relatively good dev folder pattern could be like this:
-
-/UPCOMING IMAGE PLACEHOLDER/
-
-And somehow our output folder pattern is forced to be like this:
-
-/UPCOMING IMAGE PLACEHOLDER/
+![](graph-1.png)
 
 In order to form this kind of gulp folder pipeline, we need to extract folder pattern. This is where `node-glob` fails us. Pattern information are lost after the matching.
 I've found another way to express folder inputs and outputs, the express.js-route-like way of expressing:
