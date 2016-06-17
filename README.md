@@ -35,9 +35,9 @@ In order to form this kind of gulp folder pipeline, we need to extract folder pa
 I've found another way to express folder inputs and outputs, the express.js-route-like way of expressing:
 
 ```
-// source can be
+// source can be expressed as
 asset/:project/javascript/:file
-// dist can be
+// dist can be expressed as
 destination/javascript/:project/
 ```
 
