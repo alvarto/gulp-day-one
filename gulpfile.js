@@ -8,28 +8,19 @@ var gulp = require('gulp'),
 
 // project sub modules
 var globs = require("./bin/globs"),
-	clean = require('./bin/gulp-clean'),
-	curryTask = require('./bin/gulp-builder').curryTask;
+	clean = require('./bin/gulp-clean');
 
 // browserify part
 var browserify = require('browserify'),
 	sourceStream = require('vinyl-source-stream');
 
 // simple build/copy tasks
-gulp.task('module:copy', function() {
+gulp.task('module:copy', function () {
 	return gulp.src(globs.js.module.source)
 		.pipe(gulp.dest(globs.js.module.dist));
 });
 
-gulp.task('js:copy', curryTask(
-	globs.js.nonModule,
-	function(source, destination) {
-		return gulp.src(source)
-			.pipe(gulp.dest(destination));
-	}
-));
-
-gulp.task('less:build', function(callback) {
+gulp.task('less:build', function (callback) {
 	return gulp.src(globs.css.less)
 		.pipe($.plumber({
 			errorHandler: callback
@@ -44,7 +35,7 @@ gulp.task('less:build', function(callback) {
 		.pipe(gulp.dest(globs.css.dist));
 });
 
-gulp.task('jade:build', function(callback) {
+gulp.task('jade:build', function (callback) {
 	var tasks = [];
 	var jadeOpt = {
 		pretty: '\t',
@@ -63,78 +54,83 @@ gulp.task('jade:build', function(callback) {
 });
 
 // build tasks with namespace
-gulp.task('js:compile', function(callback) {
-	curryTask(
-		globs.js.build,
-		function(source, destination) {
-			return browserify({
-					entries: [source]
-				})
-				.bundle()
-				.on('error', callback)
-				.pipe(sourceStream(source))
-				.pipe($.flatten())
-				.pipe(gulp.dest(destination));
-		}
-	)(callback);
-});
-
-gulp.task('images:copy', curryTask(
-	globs.bitmap,
-	function(source, destination) {
+gulp.task('js:copy', globs.js.nonModule.curryTask(
+	function (source, destination) {
 		return gulp.src(source)
 			.pipe(gulp.dest(destination));
 	}
 ));
 
-gulp.task('groceries:copy', curryTask(
-	globs.groceries,
-	function(source, destination) {
-		return gulp.src(source, {
-				buffer: false,
+gulp.task('js:compile', function (callback) {
+	globs.js.build.task(
+		function (source, destination) {
+			return browserify({
+				entries: [source]
 			})
+				.bundle()
+				.on('error', callback)
+				.pipe(sourceStream(source))
+				.pipe($.flatten())
+				.pipe(gulp.dest(destination));
+		},
+		callback
+	);
+});
+
+gulp.task('images:copy', globs.bitmap.curryTask(
+	function (source, destination) {
+		return gulp.src(source)
+			.pipe(gulp.dest(destination));
+	}
+));
+
+gulp.task('groceries:copy', globs.groceries.curryTask(
+	function (source, destination) {
+		return gulp.src(source, {
+			buffer: false,
+		})
 			.pipe(gulp.dest(destination));
 	}
 ));
 
 // gulp tasks for commandline
-gulp.task('clean:frontend', function(callback) {
+gulp.task('clean:frontend', function (callback) {
 	clean(globs.del.frontend, 'frontend', callback);
 });
 
-gulp.task('clean:sprite', function(callback) {
-	clean(globs.del.sprite, 'sprite', callback);
-});
+// gulp.task('clean:sprite', function (callback) {
+// 	clean(globs.del.sprite, 'sprite', callback);
+// });
 
-gulp.task('clean:font', function(callback) {
-	clean(globs.del.font, 'sprite', callback);
-});
+// gulp.task('clean:font', function (callback) {
+// 	clean(globs.del.font, 'sprite', callback);
+// });
 
-gulp.task('clean:svg', function(callback) {
-	clean(globs.del.svg, 'sprite', callback);
-});
+// gulp.task('clean:svg', function (callback) {
+// 	clean(globs.del.svg, 'sprite', callback);
+// });
 
-gulp.task('clean', [
-	'clean:frontend',
-	'clean:sprite',
-	'clean:font',
-	'clean:svg',
-]);
+// gulp.task('clean', [
+// 	'clean:frontend',
+// 	'clean:sprite',
+// 	'clean:font',
+// 	'clean:svg',
+// ]);
 
 // preprocesser
-gulp.task('sprite', require('./bin/gulp-sprite'));
-gulp.task('font', require('./bin/gulp-font'));
-gulp.task('svg', require('./bin/gulp-svg'));
+// gulp.task('sprite', require('./bin/gulp-sprite'));
+// gulp.task('font', require('./bin/gulp-font'));
+// gulp.task('svg', require('./bin/gulp-svg'));
 
-gulp.task('pre', ['sprite', 'font', 'svg']);
+// gulp.task('pre', ['sprite', 'font', 'svg']);
 
 // a good task which runs them all
-gulp.task('refresh', function(callback) {
+gulp.task('refresh', function (callback) {
 	runsequence(
 		'clean', // clean all autocommitted stuff
 		'pre', // precompile 
-		'build', // build and set up backend & test env
-		'deploy', // deploy to backend
+		'build', // build and set up backend
+		// 'deploy', // deploy to backend
 		callback
 	);
 });
@@ -148,10 +144,9 @@ gulp.task('build', [
 	'module:copy',
 	'less:build',
 	'groceries:copy',
-	'test'
 ]);
 
-gulp.task('html:change', function() {
+gulp.task('html:change', function () {
 	return gulp.src(globs.deploy.html)
 		.pipe($.changed('.cache', {
 			hasChanged: $.changed.compareSha1Digest
@@ -160,7 +155,7 @@ gulp.task('html:change', function() {
 		.pipe($.livereload());
 });
 
-gulp.task('watch', ['build'], function(callback) {
+gulp.task('watch', ['build'], function (callback) {
 	var changedArr = [];
 
 	function push(s) {
