@@ -140,15 +140,6 @@ gulp.task('build', [
 	'groceries:copy',
 ]);
 
-gulp.task('html:change', function () {
-	return gulp.src(globs.deploy.html)
-		.pipe($.changed('.cache', {
-			hasChanged: $.changed.compareSha1Digest
-		}))
-		.pipe(gulp.dest('.cache'))
-		.pipe($.livereload());
-});
-
 gulp.task('watch', ['build'], function (callback) {
 	var changedArr = [];
 
@@ -163,8 +154,7 @@ gulp.task('watch', ['build'], function (callback) {
 		}
 	}
 
-	gulp.watch(globs.views.watch, ['jade:build']);
-	gulp.watch(globs.deploy.html, ['html:change']);
+	gulp.watch(globs.views.watch, ['jade:build', pop]);
 
 	gulp.watch(globs.css.watch, ['less:build', pop])
 		.on('change', push);
