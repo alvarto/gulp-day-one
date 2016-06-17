@@ -67,7 +67,6 @@ gulp.task('js:copy', globs.js.nonModule.curryTask(
 gulp.task('js:compile', function (callback) {
 	globs.js.build.task(
 		function (source, destination) {
-			console.log(source, destination);
 			return browserify({
 				entries: [source]
 			})
