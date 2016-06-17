@@ -11,25 +11,10 @@ const globs = require("./bin/globs"),
 const browserify = require('browserify'),
 	sourceStream = require('vinyl-source-stream');
 
-// simple build/copy tasks
+// simple build/copy tasks without namespace
 gulp.task('module:copy', function () {
 	return gulp.src(globs.js.module.source)
 		.pipe(gulp.dest(globs.js.module.dist));
-});
-
-gulp.task('less:build', function (callback) {
-	return gulp.src(globs.css.less)
-		.pipe($.plumber({
-			errorHandler: callback
-		}))
-		.pipe($.less({
-			paths: [
-				'.', globs.css.lessCommon, globs.css.includeImgCommon
-			]
-		}))
-		.pipe($.flatten())
-		.pipe($.plumber.stop())
-		.pipe(gulp.dest(globs.css.dist));
 });
 
 gulp.task('jade:build', function (callback) {
@@ -48,6 +33,30 @@ gulp.task('jade:build', function (callback) {
 });
 
 // build tasks with namespace
+gulp.task('less:build', function (callback) {
+	globs.less.task(
+		function (source, destination, project, sub) {
+			if (project === 'common') {
+				return null;
+			}
+
+			return gulp.src(source)
+				.pipe($.plumber({
+					errorHandler: callback
+				}))
+				.pipe($.less({
+					paths: [
+						'.', globs.less.lessCommon, globs.less.includeImgCommon
+					]
+				}))
+				.pipe($.flatten())
+				.pipe($.plumber.stop())
+				.pipe(gulp.dest(destination));
+		},
+		callback
+	);
+});
+
 gulp.task('js:copy', globs.js.nonModule.curryTask(
 	function (source, destination) {
 		return gulp.src(source)
@@ -58,6 +67,7 @@ gulp.task('js:copy', globs.js.nonModule.curryTask(
 gulp.task('js:compile', function (callback) {
 	globs.js.build.task(
 		function (source, destination) {
+			console.log(source, destination);
 			return browserify({
 				entries: [source]
 			})
@@ -72,7 +82,10 @@ gulp.task('js:compile', function (callback) {
 });
 
 gulp.task('images:copy', globs.bitmap.curryTask(
-	function (source, destination) {
+	function (source, destination, project) {
+		if (project === "common") {
+			return null;
+		}
 		return gulp.src(source)
 			.pipe(gulp.dest(destination));
 	}
@@ -156,7 +169,7 @@ gulp.task('watch', ['build'], function (callback) {
 
 	gulp.watch(globs.views.watch, ['jade:build', pop]);
 
-	gulp.watch(globs.css.watch, ['less:build', pop])
+	gulp.watch(globs.less.watch, ['less:build', pop])
 		.on('change', push);
 
 	gulp.watch(globs.groceries.watch, ['groceries:copy', pop])

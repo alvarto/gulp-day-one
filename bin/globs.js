@@ -8,7 +8,7 @@ var folderManager = {};
 
 folderManager.js = {
 	module: { // third party js files, for copying
-		source: 'asset/common/**/*.js',
+		source: 'asset/common/javascript/**/*.js',
 		dist: 'destination/resource/module/'
 	},
 	nonModule: new TaskPathMapper( // first party js files, for copying
@@ -16,30 +16,33 @@ folderManager.js = {
 		'destination/resource/js/:project/'
 	),
 	build: new TaskPathMapper( // first party js files, for combining
-		'javascript/bundle/:entry.js',
-		'destination/resource/js/bundle/:entry.js', {
+		'javascript/:entry.js',
+		'destination/resource/js/bundle/', {
 			watch: 'javascript/bundle/**/*.js',
+			fillSource: function(entry) {
+				return `javascript/${entry}.js`;
+			},
 		}
 	),
 };
 
 folderManager.bitmap = new TaskPathMapper(
-	'asset/:project/bitmap/:sub+', //todo **?
-	'destination/resource/img/:project/:sub+', {
+	'asset/:project/bitmap/:sub*/:img', //todo **?
+	'destination/resource/img/:project/:sub*/', {
 		watch: 'asset/*/bitmap/**',
 	}
 );
 
 folderManager.svg = new TaskPathMapper(
-	'asset/:project/svg', //todo **?
-	'asset/:project/bitmap/v', {
+	'asset/:project/svg/:svgfile', //todo **?
+	'asset/:project/bitmap/v/', {
 		demoDist: 'destination/resource/html/svg/',
 	}
 );
 
 folderManager.sprite = new TaskPathMapper(
-	'asset/:project/:type(sprite|sprite\.wap)/:sub?', //todo **?
-	'asset/:project/bitmap/s', {
+	'asset/:project/:type(sprite|sprite\.wap)/:sub?/:img', //todo **?
+	'asset/:project/bitmap/s/', {
 		getLessDist: function (project) {
 			return 'asset/' + project + '/less/s';
 		},
@@ -50,22 +53,20 @@ folderManager.sprite = new TaskPathMapper(
 );
 
 folderManager.groceries = new TaskPathMapper(
-	'asset/:project/:type(html|other|font)',
-	'destination/resource/:type', {
+	'asset/:project/:type(html|other|font)/:others+',
+	'destination/resource/:type/', {
 		watch: 'asset/*/{html,other,font}/**',
 	}
 );
 
-folderManager.css = {
-	less: [
-		'asset/*/less/*.less',
-		'!asset/common/less/*.less',
-	],
-	dist: 'destination/resource/css',
-	watch: '**/*.less',
-	lessCommon: 'asset/common/less', // todo path.resolve(process.cwd(), 
-	includeImgCommon: 'asset/common/bitmap',
-};
+folderManager.less = new TaskPathMapper(
+	'asset/:project/less/:entry.less',
+	'destination/resource/css/:project/', {
+		watch: '**/*.less',
+		lessCommon: 'asset/common/less',
+		includeImgCommon: 'asset/common/bitmap',
+	}
+);
 
 folderManager.font = {
 	source: '/**/*.jade',

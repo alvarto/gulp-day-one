@@ -1,4 +1,4 @@
-var pathRegexp = require('path-to-regexp');
+const pathRegexp = require('path-to-regexp');
 
 function PathReg(path, preferedArgsList) {
 	var keys = [];
@@ -10,22 +10,31 @@ function PathReg(path, preferedArgsList) {
 
 	this.original = path;
 	this.keys = keys;
+	this.reg = regexp;
 	this.glob = "";
 	this.templateStr = "";
-	this.reg = regexp;
 
 	var that = this;
 
 	var pathSegArr = path.split("/");
 	pathSegArr.forEach(function (pathSeg, index) {
-		var theKey = false;
-		keys.forEach(function (key) {
-			pathSeg.indexOf(":" + key.name) === 0 && (theKey = key.name);
+		var theKey = false,
+			keyPos = -1;
+		keys.forEach(function (key, index) {
+			if(pathSeg.indexOf(":" + key.name) > -1){
+				theKey = key.name;
+				keyPos = index;
+			}
 		});
 
 		if (theKey) {
-			that.glob += "*";
-			that.templateStr += "${" + theKey + "}";
+			if (RegExp(`:${theKey}[*?+]`).test(pathSeg)) {
+				that.glob += "**";
+				that.templateStr += "${" + `Array.isArray(${theKey}) ? ${theKey}.join('/') : ${theKey}` + " || ''}";
+			} else {
+				that.glob += "*";
+				that.templateStr += "${" + `${theKey}` + "}";
+			}
 		} else {
 			that.glob += pathSeg;
 			that.templateStr += pathSeg;
@@ -37,7 +46,7 @@ function PathReg(path, preferedArgsList) {
 		}
 	});
 
-	this.templateStr = "`" + that.templateStr + "`";
+	this.templateStr = "`" + this.templateStr + "`";
 
 	var fnarg = Array.isArray(preferedArgsList) ?
 		preferedArgsList : keys.map(function (key) {
@@ -46,7 +55,7 @@ function PathReg(path, preferedArgsList) {
 	fnarg.push("return " + this.templateStr);
 	this.fill = Function.apply(null, fnarg);
 
-	this.compile = pathRegexp.compile(path);
+	// this.compile = pathRegexp.compile(path);
 }
 
 module.exports = PathReg;

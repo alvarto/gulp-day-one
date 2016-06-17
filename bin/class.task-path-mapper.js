@@ -20,7 +20,13 @@ function TaskPathMapper(from, to, overrides) {
 		from: from,
 		to: to,
 		pathFrom: pathFrom,
-		pathTo: pathTo
+		pathTo: pathTo,
+		fillSource: function() { // source glob goes back to the folder outside the file
+			var str = pathFrom.fill.apply(null, arguments);
+			str = str.replace(arguments[arguments.length - 1], "*");
+			return str;
+		},
+		fillDist: pathTo.fill
 	});
 	_.extend(this, overrides);
 }
@@ -31,6 +37,8 @@ TaskPathMapper.prototype.task = function (gulpBuildFn, callback) {
 		.then(function (paramTable) {
 			var tasks = paramTable.map(function (params) {
 				return gulpBuildFn.apply(mapper, params);
+			}).filter(function (task) {
+				return !!task;
 			});
 			if (!tasks || tasks.length < 2) {
 				callback();
@@ -64,12 +72,12 @@ TaskPathMapper.prototype.promiseSourceParse = function () {
 				}
 				return true;
 			}).map(function (elem) {
-				var params = elem.slice();
-				params.shift();
-				var source = mapper.pathFrom.fill.apply(null, params);
-				var destination = mapper.pathTo.fill.apply(null, params);
+				var sourceTokens = elem.slice();
+				sourceTokens.shift();
+				var source = mapper.fillSource.apply(null, sourceTokens);
+				var destination = mapper.fillDist.apply(null, sourceTokens);
 
-				return [source, destination].concat(params);
+				return [source, destination].concat(sourceTokens);
 			});
 
 			return paramTable;
