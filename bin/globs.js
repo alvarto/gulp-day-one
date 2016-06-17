@@ -27,9 +27,12 @@ folderManager.js = {
 };
 
 folderManager.bitmap = new TaskPathMapper(
-	'asset/:project/bitmap/:sub*/:imgfile',
-	'destination/resource/img/:project/:sub*/', {
+	'asset/:project/bitmap/',
+	'destination/resource/img/:project/', {
 		watch: 'asset/*/bitmap/**',
+		fillSource: function (project) {
+			return `asset/${project}/bitmap/**`;
+		},
 	}
 );
 

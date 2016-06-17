@@ -22,7 +22,9 @@ function TaskPathMapper(from, to, overrides) {
 		pathFrom: pathFrom,
 		pathTo: pathTo,
 		globSource: pathFrom.glob,
-		fillSource: function() { // source glob goes back to the folder outside the file
+		fillSource: function() {
+			// source glob goes back to the folder outside the file
+			// todo fix a bug causing "a*set/site/bitmap/s/"
 			var str = pathFrom.fill.apply(null, arguments);
 			str = str.replace(arguments[arguments.length - 1], "*");
 			return str;
